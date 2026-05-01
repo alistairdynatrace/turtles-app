@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Turtle Status</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      width: 100%;
+      background: #000;
+      overflow: hidden;
+    }
+    #bg {
+      position: fixed;
+      inset: 0;
+      width: 100vw;
+      height: 100vh;
+      object-fit: cover;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <img id="bg" alt="status" />
+  <script>
+    const WORKING_IMG = '/working.png';
+    const BROKEN_IMG = '/broken.jpeg';
+
+    async function refresh() {
+      try {
+        const res = await fetch('/status', { cache: 'no-store' });
+        const data = await res.json();
+        const img = document.getElementById('bg');
+        const next = data.broken ? BROKEN_IMG : WORKING_IMG;
+        if (!img.src.endsWith(next)) img.src = next;
+      } catch (e) {
+        // ignore
+      }
+    }
+
+    refresh();
+    setInterval(refresh, 15000);
+  </script>
+</body>
+</html>
