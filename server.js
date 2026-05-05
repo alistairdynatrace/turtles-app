@@ -13,13 +13,11 @@ function isErrorWindow() {
 }
 
 // Endpoint that errors during the first 20 minutes of every hour
-app.get('/makeerror', (req, res, next) => {
+app.get('/makeerror', (req, res) => {
   if (isErrorWindow()) {
-    const err = new Error('thisTurtleNeedsALittleLonger');
-    err.status = 500;
-    return next(err);
+    return res.status(500).sendFile(path.join(__dirname, 'public', 'broken.jpeg'));
   }
-  res.status(200).json({ status: 'ok' });
+  res.status(200).sendFile(path.join(__dirname, 'public', 'working.png'));
 });
 
 // Endpoint that always returns 200
